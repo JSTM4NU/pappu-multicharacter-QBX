@@ -84,28 +84,27 @@ local function skyCam(bool)
 end
 
 local function openCharMenu(bool)
-    lib.callback("pappu-multicharacter:server:GetNumberOfCharacters", function(result)
-        local translations = {}
-        for k in pairs(Lang.fallback and Lang.fallback.phrases or Lang.phrases) do
-            if k:sub(0, ('ui.'):len()) then
-                translations[k:sub(('ui.'):len() + 1)] = Lang:t(k)
-            end
+    local numChars = lib.callback.await("pappu-multicharacter:server:GetNumberOfCharacters", false)
+    local translations = {}
+    for k in pairs(Lang.fallback and Lang.fallback.phrases or Lang.phrases) do
+        if k:sub(0, ('ui.'):len()) then
+            translations[k:sub(('ui.'):len() + 1)] = Lang:t(k)
         end
-        SetNuiFocus(bool, bool)
-        SendNUIMessage({
-            action = "ui",
-            customNationality = Config.customNationality,
-            toggle = bool,
-            nChar = result,
-            enableDeleteButton = Config.EnableDeleteButton,
-            translations = translations
-        })
-        skyCam(bool)
-        if not loadScreenCheckState then
-            ShutdownLoadingScreenNui()
-            loadScreenCheckState = true
-        end
-    end)
+    end
+    SetNuiFocus(bool, bool)
+    SendNUIMessage({
+        action = "ui",
+        customNationality = Config.customNationality,
+        toggle = bool,
+        nChar = numChars,
+        enableDeleteButton = Config.EnableDeleteButton,
+        translations = translations
+    })
+    skyCam(bool)
+    if not loadScreenCheckState then
+        ShutdownLoadingScreenNui()
+        loadScreenCheckState = true
+    end
 end
 
 -- Events
