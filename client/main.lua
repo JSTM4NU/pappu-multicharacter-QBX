@@ -60,13 +60,13 @@ local function initializePedModel(model, data)
         PlaceObjectOnGroundProperly(charPed)
         SetBlockingOfNonTemporaryEvents(charPed, true)
         if data then
-            TriggerEvent('qb-clothing:client:loadPlayerClothing', data, charPed)
+            TriggerEvent('illenium-appearance:client:loadPlayerClothing', data, charPed)
         end
     end)
 end
 
 local function skyCam(bool)
-    TriggerEvent('qb-weathersync:client:DisableSync')
+    TriggerEvent('Renewed-Weathersync:client:DisableSync')
     if bool then
         DoScreenFadeIn(1000)
         SetTimecycleModifier('hud_def_blur')
@@ -85,7 +85,7 @@ local function skyCam(bool)
 end
 
 local function openCharMenu(bool)
-    QBCore.Functions.TriggerCallback("pappu-multicharacter:server:GetNumberOfCharacters", function(result)
+    lib.callback("pappu-multicharacter:server:GetNumberOfCharacters", function(result)
         local translations = {}
         for k in pairs(Lang.fallback and Lang.fallback.phrases or Lang.phrases) do
             if k:sub(0, ('ui.'):len()) then
@@ -126,8 +126,8 @@ RegisterNetEvent('pappu-multicharacter:client:closeNUIdefault', function() -- Th
     SetEntityVisible(PlayerPedId(), true)
     Wait(500)
     DoScreenFadeIn(250)
-    TriggerEvent('qb-weathersync:client:EnableSync')
-    TriggerEvent('qb-clothes:client:CreateFirstCharacter')
+    TriggerEvent('Renewed-Weathersync:client:EnableSync')
+    TriggerEvent('illenium-appearance:client:CreateFirstCharacter')
 end)
 
 RegisterNetEvent('pappu-multicharacter:client:closeNUI', function()
@@ -162,7 +162,7 @@ end)
 
 
 RegisterNetEvent('pappu-multicharacter:client:spawnLastLocation', function(coords, cData)
-    QBCore.Functions.TriggerCallback('apartments:GetOwnedApartment', function(result)
+    lib.callback('apartments:GetOwnedApartment', function(result)
         if result then
             TriggerEvent("apartments:client:SetHomeBlip", result.type)
             local ped = PlayerPedId()
@@ -170,7 +170,7 @@ RegisterNetEvent('pappu-multicharacter:client:spawnLastLocation', function(coord
             SetEntityHeading(ped, coords.w)
             FreezeEntityPosition(ped, false)
             SetEntityVisible(ped, true)
-            local PlayerData = QBCore.Functions.GetPlayerData()
+            local PlayerData = QBX.PlayerData()
             local insideMeta = PlayerData.metadata["inside"]
             DoScreenFadeOut(500)
 
