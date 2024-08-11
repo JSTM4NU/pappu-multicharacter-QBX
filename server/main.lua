@@ -249,7 +249,7 @@ lib.callback.register("pappu-multicharacter:server:setupCharacters", function(so
     end)
 end)
 
-lib.callback("pappu-multicharacter:server:getSkin", function(_, cid)
+lib.callback.register("pappu-multicharacter:server:getSkin", function(_, cid)
     local result = MySQL.query.await('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', {cid, 1})
     if result[1] ~= nil then
         return result[1].model, result[1].skin
