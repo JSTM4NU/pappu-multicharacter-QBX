@@ -1,8 +1,8 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-author 'pappu (adapted by jstm4nu)'
-description 'pappu-multicharacter adapted to work on QBX Core'
+author 'pappu (adapted by jstm4nu and solareon)'
+description 'pappu-multicharacter adapted to work on QBX Core with license2 support'
 version '1.0.5'
 
 shared_scripts {
