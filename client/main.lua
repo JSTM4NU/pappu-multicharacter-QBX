@@ -1,7 +1,6 @@
 local cam = nil
 local charPed = nil
 local loadScreenCheckState = false
-local QBCore = exports['qb-core']:GetCoreObject()
 local cached_player_skins = {}
 
 local randommodels = { -- models possible to load when choosing empty slot
@@ -259,16 +258,8 @@ RegisterNUICallback('cDataPed', function(nData, cb)
     DeleteEntity(charPed)
     if cData ~= nil then
         if not cached_player_skins[cData.citizenid] then
-            local temp_model = promise.new()
-            local temp_data = promise.new()
 
-            QBCore.Functions.TriggerCallback('pappu-multicharacter:server:getSkin', function(model, data)
-                temp_model:resolve(model)
-                temp_data:resolve(data)
-            end, cData.citizenid)
-
-            local resolved_model = Citizen.Await(temp_model)
-            local resolved_data = Citizen.Await(temp_data)
+            local resolved_model, resolved_data = lib.callback.await('pappu-multicharacter:server:getSkin', false, cData.citizenid)
 
             cached_player_skins[cData.citizenid] = {model = resolved_model, data = resolved_data}
         end
@@ -291,7 +282,7 @@ RegisterNUICallback('cDataPed', function(nData, cb)
 end)
 
 RegisterNUICallback('setupCharacters', function(_, cb)
-    QBCore.Functions.TriggerCallback("pappu-multicharacter:server:setupCharacters", function(result)
+    lib.callback("pappu-multicharacter:server:setupCharacters", false, function(result)
         cached_player_skins = {}
         SendNUIMessage({
             action = "setupCharacters",

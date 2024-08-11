@@ -1,27 +1,20 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local starterItems = require '@qbx_core.config.shared'.starterItems
 local hasDonePreloading = {}
 
 -- Functions
 
 local function GiveStarterItems(source)
-    local src = source
-    local Player = exports.qbx_core:GetPlayer(source)
-    for _, v in pairs(QBCore.Shared.StarterItems) do
-        local info = {}
-        if v.item == "id_card" then
-            info.citizenid = Player.PlayerData.citizenid
-            info.firstname = Player.PlayerData.charinfo.firstname
-            info.lastname = Player.PlayerData.charinfo.lastname
-            info.birthdate = Player.PlayerData.charinfo.birthdate
-            info.gender = Player.PlayerData.charinfo.gender
-            info.nationality = Player.PlayerData.charinfo.nationality
-        elseif v.item == "driver_license" then
-            info.firstname = Player.PlayerData.charinfo.firstname
-            info.lastname = Player.PlayerData.charinfo.lastname
-            info.birthdate = Player.PlayerData.charinfo.birthdate
-            info.type = "Class C Driver License"
+    if GetResourceState('ox_inventory') == 'missing' then return end
+    while not exports.ox_inventory:GetInventory(source) do
+        Wait(100)
+    end
+    for i = 1, #starterItems do
+        local item = starterItems[i]
+        if item.metadata and type(item.metadata) == 'function' then
+            exports.ox_inventory:AddItem(source, item.name, item.amount, item.metadata(source))
+        else
+            exports.ox_inventory:AddItem(source, item.name, item.amount, item.metadata)
         end
-        exports['ox_inventory']:AddItem(src, v.item, v.amount, false, info, 'pappu-multicharacter:GiveStarterItems')
     end
 end
 
@@ -89,19 +82,22 @@ end
 
 
 -- Commands
+lib.addCommand('relog', {
+    help = 'Ritorna alla selezione del personaggio',
+    restricted = 'group.admin' },
+    function(source)
+        exports.qbx_core:Logout(source)
+        TriggerClientEvent('pappu-multicharacter:client:chooseChar', source)
+    end
+)
 
-QBCore.Commands.Add("relog", "Ritorna alla selezione del personaggio", {}, false, function(source)
-    local src = source
-    exports.qbx_core:Logout(source)
-    TriggerClientEvent('pappu-multicharacter:client:chooseChar', src)
-end, "admin")
-
-QBCore.Commands.Add("closeNUI", "Close Multi NUI", {}, false, function(source)
-    local src = source
-    TriggerClientEvent('pappu-multicharacter:client:closeNUI', src)
-end)
-
-
+lib.addCommand('closeNUI', {
+    help = 'Close Multi NUI',
+    },
+    function(source)
+        TriggerClientEvent('pappu-multicharacter:client:closeNUI', source)
+    end
+)
 
 -- Events
 
@@ -135,8 +131,7 @@ RegisterNetEvent('pappu-multicharacter:server:loadUserData', function(cData)
         until hasDonePreloading[src]
         local fivemname = GetPlayerName(src)
         sendToDiscord("Player Loaded", string.format("Citizen ID: %s\nFiveM Name: %s", cData.citizenid, fivemname), 3066993)
-        QBCore.Commands.Refresh(src)
-        loadHouseData(src)
+        -- loadHouseData(src)
         if Config.SkipSelection then
             local coords = json.decode(cData.position)
             TriggerClientEvent('pappu-multicharacter:client:spawnLastLocation', src, coords, cData)
@@ -151,25 +146,6 @@ RegisterNetEvent('pappu-multicharacter:server:loadUserData', function(cData)
         TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(source) .. "** (<@"..(GetPlayerIdentifier(source, 'discord'):gsub("discord:", "") or "unknown").."> |  ||"  ..(GetPlayerIdentifier(source, 'ip') or 'undefined') ..  "|| | " ..(GetPlayerIdentifier(source, 'license') or 'undefined') .." | " ..citizenid.." | "..source..") loaded..")
     end
 end)
-
--- Ensure the resource name is correct
-Citizen.CreateThread(function()
-    if (GetCurrentResourceName() ~= "pappu-multicharacter") then 
-        print("[" .. GetCurrentResourceName() .. "] " .. "IMPORTANT: This resource must be named pappu-multicharacter for it to work properly!")
-        print("[" .. GetCurrentResourceName() .. "] " .. "IMPORTANT: This resource must be named pappu-multicharacter for it to work properly!");
-        print("[" .. GetCurrentResourceName() .. "] " .. "IMPORTANT: This resource must be named pappu-multicharacter for it to work properly!");
-        print("[" .. GetCurrentResourceName() .. "] " .. "IMPORTANT: This resource must be named pappu-multicharacter for it to work properly!");
-    end
-end)
-
--- Print resource start message
-Citizen.CreateThread(function()
-    local resourceName = "P4ScriptsFivem Started ("..GetCurrentResourceName()..")"
-    print("\n^1----------------------------------------------------------------------------------^7")
-    print(resourceName)
-    print("^1----------------------------------------------------------------------------------^7")
-end)
-
 
 RegisterNetEvent('pappu-multicharacter:server:createCharacter', function(data)
     local src = source
@@ -186,15 +162,13 @@ RegisterNetEvent('pappu-multicharacter:server:createCharacter', function(data)
             local randbucket = (GetPlayerPed(src) .. math.random(1,999))
             SetPlayerRoutingBucket(src, randbucket)
             print('^2[qb-core]^7 '..GetPlayerName(src)..' has successfully loaded!')
-            QBCore.Commands.Refresh(src)
-            loadHouseData(src)
+            -- loadHouseData(src)
             TriggerClientEvent("pappu-multicharacter:client:closeNUI", src)
             TriggerClientEvent('apartments:client:setupSpawnUI', src, newData)
             GiveStarterItems(src)
         else
             print('^2[qb-core]^7 '..GetPlayerName(src)..' has successfully loaded!')
-            QBCore.Commands.Refresh(src)
-            loadHouseData(src)
+            -- loadHouseData(src)
             TriggerClientEvent("pappu-multicharacter:client:closeNUIdefault", src)
             GiveStarterItems(src)
         end
@@ -211,13 +185,12 @@ end)
 
 -- Callbacks
 
-lib.callback.register("pappu-multicharacter:server:GetUserCharacters", function(source, cb)
+lib.callback.register("pappu-multicharacter:server:GetUserCharacters", function(source)
     local src = source
     local license = GetPlayerIdentifier(src, 'license')
     local characters = {}
     if not license then
-        cb(characters)
-        return
+        return characters
     end
     MySQL.query('SELECT * FROM players WHERE license = ?', {license}, function(result)
         if result[1] ~= nil then
@@ -230,22 +203,21 @@ lib.callback.register("pappu-multicharacter:server:GetUserCharacters", function(
                 }
                 table.insert(characters, data)
             end
-            cb(characters)
+            return characters
         else
-            cb(characters)
+            return characters
         end
     end)
 end)
 
-lib.callback.register("pappu-multicharacter:server:GetServerLogs", function(_, cb)
+lib.callback.register("pappu-multicharacter:server:GetServerLogs", function(_)
     MySQL.query('SELECT * FROM server_logs', {}, function(result)
-        cb(result)
+        return result
     end)
 end)
 
-lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", function(source, cb)
-    local src = source
-    local license = GetPlayerIdentifier(src, 'license')
+lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", function(source)
+    local license = GetPlayerIdentifier(source, 'license')
     local numOfChars = 0
 
     if next(Config.PlayersNumberOfCharacters) then
@@ -260,10 +232,10 @@ lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", funct
     else
         numOfChars = Config.DefaultNumberOfCharacters
     end
-    cb(numOfChars)
+    return numOfChars
 end)
 
-lib.callback.register("pappu-multicharacter:server:setupCharacters", function(source, cb)
+lib.callback.register("pappu-multicharacter:server:setupCharacters", function(source)
     local license = GetPlayerIdentifier(source, 'license')
     local plyChars = {}
     MySQL.query('SELECT * FROM players WHERE license = ?', {license}, function(result)
@@ -273,15 +245,15 @@ lib.callback.register("pappu-multicharacter:server:setupCharacters", function(so
             result[i].job = json.decode(result[i].job)
             plyChars[#plyChars+1] = result[i]
         end
-        cb(plyChars)
+        return plyChars
     end)
 end)
 
-lib.callback("pappu-multicharacter:server:getSkin", function(_, cb, cid)
+lib.callback("pappu-multicharacter:server:getSkin", function(_, cid)
     local result = MySQL.query.await('SELECT * FROM playerskins WHERE citizenid = ? AND active = ?', {cid, 1})
     if result[1] ~= nil then
-        cb(result[1].model, result[1].skin)
+        return result[1].model, result[1].skin
     else
-        cb(nil)
+        return
     end
 end)
