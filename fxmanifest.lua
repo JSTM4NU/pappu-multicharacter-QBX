@@ -9,7 +9,7 @@ shared_scripts {
     '@qbx_core/shared/locale.lua',
     '@ox_lib/init.lua'
     'locales/en.lua',
-    'locales/*.lua',
+    'locales/it.lua',
     'config.lua'
 }
 
