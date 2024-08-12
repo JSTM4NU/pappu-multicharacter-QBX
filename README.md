@@ -7,15 +7,17 @@ Custom Multi Character Feature for QBOX And inspired by NoPixel 4.0.
 - Ability To See Character Information During Selection.
 - Ability To Customise Your Character Slot At [config.lua](https://github.com/JSTM4NU/pappu-multicharacter-QBX/blob/main/config.lua).
 - **New**: Ability to log character creation, deletion, and selection to a Discord [webhook](https://github.com/JSTM4NU/pappu-multicharacter-QBX/blob/main/server/main.lua#L61).
+
 ## Preview
 ![Group 5765](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/904aa0c6-cabf-4b9a-82ca-ac224e5cc24b)
+![Group 847](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/9d7d768b-799f-4dfe-9567-62077479db63)
 
 
 ## Features
 If You Use [qb-houses](https://github.com/qbcore-framework/qb-houses)
 Go To Line 339 in Server/main.lua [here](https://github.com/qbcore-framework/qb-houses/blob/main/server/main.lua#L339)
 
-Repplace This 
+Replace This 
 ```
     TriggerClientEvent('qb-multicharacter:client:chooseChar', src)
 ```
@@ -23,10 +25,6 @@ With This
 ```
     TriggerClientEvent('pappu-multicharacter:client:chooseChar', src)
 ```
-
-## Screenshots
-![Group 847](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/9d7d768b-799f-4dfe-9567-62077479db63)
-
 
 ## Installation
 ### Manual
