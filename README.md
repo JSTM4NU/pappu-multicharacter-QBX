@@ -9,8 +9,8 @@ Custom Multi Character Feature for QBOX And inspired by NoPixel 4.0.
 - **New**: Ability to log character creation, deletion, and selection to a Discord [webhook](https://github.com/JSTM4NU/pappu-multicharacter-QBX/blob/main/server/main.lua#L61).
 
 ## Preview
-![Group 5765](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/904aa0c6-cabf-4b9a-82ca-ac224e5cc24b)
 ![Group 847](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/9d7d768b-799f-4dfe-9567-62077479db63)
+![Group 5765](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/904aa0c6-cabf-4b9a-82ca-ac224e5cc24b)
 
 
 ## Features
@@ -28,7 +28,7 @@ With This
 
 ## Installation
 ### Manual
-- Download the script in your language from the released tab and put it in the `[standalone]` directory.
+- Download the script in your language from the releases tab and put it in the `[standalone]` directory.
 - Make sure to name the folder ```pappu-multicharacter```
 - Insert the following code in your server.cfg
 
