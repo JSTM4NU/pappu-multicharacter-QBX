@@ -35,6 +35,8 @@ With This
 ```
 ensure qbx_core
 ensure qbx_spawn
+ensure ox_lib
+ensure ox_inventory
 ensure illenium-appearance
 ensure Renewed-Weathersync
 ensure pappu-multicharacter
@@ -42,9 +44,11 @@ ensure pappu-multicharacter
 
 ## Dependencies
 - [qbx_core](https://github.com/Qbox-project/qbx_core)
-- [qbx_spawn](https://github.com/Qbox-project/qbx_spawn) - Spawn selector
-- [illenium-appearance](https://github.com/iLLeniumStudios/illenium-appearance) - For the character creation and saving outfits.
-- [Renewed_Weathersync](https://github.com/Renewed-Scripts/Renewed-Weathersync) - To sync the weather while creating the character
+- [qbx_spawn](https://github.com/Qbox-project/qbx_spawn)
+- [illenium-appearance](https://github.com/iLLeniumStudios/illenium-appearance)
+- [Renewed_Weathersync](https://github.com/Renewed-Scripts/Renewed-Weathersync)
+- [ox_inventory](https://github.com/overextended/ox_inventory)
+- [ox_lib](https://github.com/overextended/ox_lib)
 
 ## Credits & Original Repositories
 - [pappu-multicharacter](https://github.com/P4ScriptsFivem/pappu-multicharacter)
