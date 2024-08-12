@@ -1,25 +1,25 @@
-# Pappu-Multicharacter
-Multi Character Feature for QBCore Multicharacter And inspired by NoPixel 4.0. 
+# Pappu-Multicharacter with QBOX support
+Custom Multi Character Feature for QBOX And inspired by NoPixel 4.0. 
 
 ## Features
 - Ability To Create Max 4 Characters.
 - Ability Delete Any Character.
 - Ability To See Character Information During Selection.
-- Ability To Customise Your Character Slot At [config.lua](https://github.com/P4ScriptsFivem/pappu-multicharacter/blob/main/config.lua).
-- **New**: Ability to log character creation, deletion, and selection to a Discord [webhook](https://github.com/P4ScriptsFivem/pappu-multicharacter/blob/main/server/main.lua#L61).
+- Ability To Customise Your Character Slot At [config.lua](https://github.com/JSTM4NU/pappu-multicharacter-QBX/blob/main/config.lua).
+- **New**: Ability to log character creation, deletion, and selection to a Discord [webhook](https://github.com/JSTM4NU/pappu-multicharacter-QBX/blob/main/server/main.lua#L61).
 ## Preview
 ![Group 5765](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/904aa0c6-cabf-4b9a-82ca-ac224e5cc24b)
 
 
 ## Features
 If You Use [qb-houses](https://github.com/qbcore-framework/qb-houses)
-Go To Line 324 in Server/main.lua [here](https://github.com/qbcore-framework/qb-houses/blob/main/server/main.lua)
+Go To Line 324 in Server/main.lua [here](https://github.com/qbcore-framework/qb-houses/blob/main/server/main.lua#L324)
 
-Remove This 
+Repplace This 
 ```
     TriggerClientEvent('qb-multicharacter:client:chooseChar', src)
 ```
-Add This  
+With This  
 ```
     TriggerClientEvent('pappu-multicharacter:client:chooseChar', src)
 ```
@@ -30,26 +30,25 @@ Add This
 
 ## Installation
 ### Manual
-- Download the script and put it in the `[qb]` directory.
+- Download the script and put it in the `[standalone]` directory.
 - Add the following code to your server.cfg/resouces.cfg
 
 ```
-ensure qb-core
+ensure qbx_core
 ensure pappu-multicharacter
-ensure qb-spawn
-ensure qb-apartments
-ensure qb-clothing
-ensure qb-weathersync
+ensure qbx_spawn
+ensure illenium-appearance
+ensure Renewed-Weathersync
 ```
 
 ## Dependencies
-- [qb-core](https://github.com/qbcore-framework/qb-core)
-- [qb-spawn](https://github.com/qbcore-framework/qb-spawn) - Spawn selector
-- [qb-apartments](https://github.com/qbcore-framework/qb-apartments) - For giving the player a apartment after creating a character.
-- [qb-clothing](https://github.com/qbcore-framework/qb-clothing) - For the character creation and saving outfits.
-- [qb-weathersync](https://github.com/qbcore-framework/qb-weathersync) - For adjusting the weather while player is creating a character.
+- [qbx_core](https://github.com/Qbox-project/qbx_core)
+- [qbx_spawn](https://github.com/Qbox-project/qbx_spawn) - Spawn selector
+- [illenium-appearance](https://github.com/iLLeniumStudios/illenium-appearance) - For the character creation and saving outfits.
+- [Renewed_Weathersync](https://github.com/Renewed-Scripts/Renewed-Weathersync) - To sync the weather while creating the character
 
-## Credits & Original Repository
+## Credits & Original Repositories
+- [pappu-multicharacter](https://github.com/P4ScriptsFivem/pappu-multicharacter)
 - [qb-multicharacter](https://github.com/qbcore-framework/qb-multicharacter)
   
 ## License
