@@ -28,7 +28,7 @@ With This
 
 ## Installation
 ### Manual
-- Download the script in your language from the releases tab and put it in the `[standalone]` directory.
+- Download the script in your language from the [releases tab](https://github.com/JSTM4NU/pappu-multicharacter-QBX/releases) and put it in the `[standalone]` directory.
 - Make sure to name the folder ```pappu-multicharacter```
 - Insert the following code in your server.cfg
 
