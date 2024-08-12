@@ -10,6 +10,7 @@ shared_scripts {
     '@ox_lib/init.lua',
     'locales/en.lua',
     'locales/it.lua',
+    'locales/es.lua,
     'config.lua'
 }
 
@@ -19,21 +20,25 @@ client_scripts {
 
 server_scripts  {
     '@oxmysql/lib/MySQL.lua',
-    '@qb-apartments/config.lua',
     'server/main.lua'
 }
 
 ui_page 'html/index.html'
 
 files {
-    'html/image/*.png',
-    'html/image/*.gif',
-    "html/js/*",
+    'html/image/action_key.png',
+    'html/image/action_dot.gif',
+    "html/js/script.js",
     'html/index.html',
-    'html/css/*',
+    'html/css/reset.css',
+    'html/css/style.css'
 }
 
 dependencies {
     'qbx_core',
-    'qbx_spawn'
+    'qbx_spawn',
+    'illenium-appearance',
+    'Renewed-Weathersync',
+    'ox_inventory',
+    'ox_lib'
 }
