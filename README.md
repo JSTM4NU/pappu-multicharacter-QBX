@@ -28,15 +28,16 @@ With This
 
 ## Installation
 ### Manual
-- Download the script and put it in the `[standalone]` directory.
-- Add the following code to your server.cfg/resouces.cfg
+- Download the script in your language from the released tab and put it in the `[standalone]` directory.
+- Make sure to name the folder ```pappu-multicharacter```
+- Insert the following code in your server.cfg
 
 ```
 ensure qbx_core
-ensure pappu-multicharacter
 ensure qbx_spawn
 ensure illenium-appearance
 ensure Renewed-Weathersync
+ensure pappu-multicharacter
 ```
 
 ## Dependencies
