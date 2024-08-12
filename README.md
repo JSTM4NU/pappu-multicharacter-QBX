@@ -13,7 +13,7 @@ Custom Multi Character Feature for QBOX And inspired by NoPixel 4.0.
 ![Group 5765](https://github.com/P4ScriptsFivem/pappu-multicharacter/assets/120780563/904aa0c6-cabf-4b9a-82ca-ac224e5cc24b)
 
 
-## Features
+## Edits
 If You Use [qb-houses](https://github.com/qbcore-framework/qb-houses)
 Go To Line 339 in Server/main.lua [here](https://github.com/qbcore-framework/qb-houses/blob/main/server/main.lua#L339)
 
@@ -51,4 +51,4 @@ ensure pappu-multicharacter
 - [qb-multicharacter](https://github.com/qbcore-framework/qb-multicharacter)
   
 ## License
-[GPL-3.0 license](LICENSE)
+[GNU GPL-3.0](LICENSE)
