@@ -98,7 +98,7 @@ local function openCharMenu(bool)
         toggle = bool,
         nChar = numChars,
         enableDeleteButton = Config.EnableDeleteButton,
-        translations = translations
+        translations = translations,
     })
     skyCam(bool)
     if not loadScreenCheckState then
@@ -288,6 +288,7 @@ RegisterNUICallback('setupCharacters', function(_, cb)
             characters = result
         })
         cb("ok")
+        print(json.encode(characters))
     end)
 end)
 
@@ -314,4 +315,3 @@ RegisterNUICallback('removeCharacter', function(data, cb)
     TriggerEvent('pappu-multicharacter:client:chooseChar')
     cb("ok")
 end)
-
