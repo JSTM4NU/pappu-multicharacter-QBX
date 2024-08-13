@@ -51,7 +51,7 @@ end
 
 -- Discord logging function
 local function sendToDiscord(name, message, color)
-    local discordWebhook = "https://canary.discord.com/api/webhooks/1255278139291209831/rmq4wlFMeMTEHiU1fnQ08jWhHdrJ5e4wJ7ETkBOuzm1I82w2Qi_-u57NUIO1rjUNUY_D" -- Replace with your Discord webhook URL
+    local discordWebhook = "https://discord.com/api/webhooks/1272730465211650138/B39iw7bVeCk9lVvALyKvApPB3svP5yKhKiJlhonXfvc6rS5VuhYzl8RDc4mk8W2WZFep" -- Replace with your Discord webhook URL
     
     local embeds = {
         {
@@ -84,7 +84,7 @@ end
 -- Commands
 lib.addCommand('relog', {
     help = 'Ritorna alla selezione del personaggio',
-    restricted = 'group.admin' },
+    restricted = false },
     function(source)
         exports.qbx_core:Logout(source)
         TriggerClientEvent('pappu-multicharacter:client:chooseChar', source)
@@ -102,7 +102,7 @@ lib.addCommand('closeNUI', {
 -- Events
 
 AddEventHandler('QBCore:Server:PlayerLoaded', function(Player)
-    Wait(1000) -- 1 second should be enough to do the preloading in other resources
+    Wait(2000) -- 1 second should be enough to do the preloading in other resources
     hasDonePreloading[Player.PlayerData.source] = true
 end)
 
@@ -143,7 +143,7 @@ RegisterNetEvent('pappu-multicharacter:server:loadUserData', function(cData)
                 TriggerClientEvent('qbx_spawn:client:openUI', src, true)
             end
         end
-        TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(source) .. "** (<@"..(GetPlayerIdentifier(source, 'discord'):gsub("discord:", "") or "unknown").."> |  ||"  ..(GetPlayerIdentifier(source, 'ip') or 'undefined') ..  "|| | " ..(GetPlayerIdentifier(source, 'license') or 'undefined') .." | " ..citizenid.." | "..source..") loaded..")
+        --TriggerEvent("qb-log:server:CreateLog", "joinleave", "Loaded", "green", "**".. GetPlayerName(source) .. "** (<@"..(GetPlayerIdentifier(source, 'discord'):gsub("discord:", "")).."> |  ||"  ..(GetPlayerIdentifier(source, 'ip')) ..  "|| | " ..(GetPlayerIdentifier(source, 'license')) .." | " ..citizenid.." | "..source..") loaded..")
     end
 end)
 
@@ -164,7 +164,7 @@ RegisterNetEvent('pappu-multicharacter:server:createCharacter', function(data)
             print('^2[qb-core]^7 '..GetPlayerName(src)..' has successfully loaded!')
             -- loadHouseData(src)
             TriggerClientEvent("pappu-multicharacter:client:closeNUI", src)
-            TriggerClientEvent('apartments:client:setupSpawnUI', src, newData)
+            TriggerClientEvent('qb-apartments:client:setupSpawnUI', src, newData)
             GiveStarterItems(src)
         else
             print('^2[qb-core]^7 '..GetPlayerName(src)..' has successfully loaded!')
@@ -180,20 +180,20 @@ RegisterNetEvent('pappu-multicharacter:server:deleteCharacter', function(citizen
     exports.qbx_core:DeleteCharacter(src, citizenid)
     local fivemname = GetPlayerName(src)
     sendToDiscord("Character Deleted", string.format("Citizen ID: %s\nFiveM Name: %s", citizenid, fivemname), 15158332)
-    TriggerClientEvent('exports.qbx_core:Notify', src, "Character deleted!" , "success")
+    TriggerClientEvent('okokNotify:Alert', src, 'Gestione personaggi', 'Personaggio eliminato con successo', 3000, 'success')
 end)
 
 -- Callbacks
 
 lib.callback.register("pappu-multicharacter:server:GetUserCharacters", function(source)
     local src = source
-    local license, license2 = GetPlayerIdentifierByType(src, 'license'), GetPlayerIdentifierByType(src, 'license2')
+    local license = GetPlayerIdentifierByType(src, 'license2')
     local characters = {}
     if not license then
         return characters
     end
-    MySQL.query('SELECT * FROM players WHERE license = ? OR license = ?', {license2, license}, function(result)
-        if result[1] ~= nil then
+    MySQL.query('SELECT * FROM players WHERE license = ?', {license}, function(result)
+        if result ~= nil then
             for _, v in pairs(result) do
                 local charinfo = json.decode(v.charinfo)
                 local data = {
@@ -216,13 +216,13 @@ lib.callback.register("pappu-multicharacter:server:GetServerLogs", function(_)
     end)
 end)
 
-lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", function(source)
-    local license, license2 = GetPlayerIdentifierByType(src, 'license'), GetPlayerIdentifierByType(src, 'license2')
+local src = source
+lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", function(src)
+    local license2 = GetPlayerIdentifierByType(src, 'license2')
     local numOfChars = 0
-
     if next(Config.PlayersNumberOfCharacters) then
         for _, v in pairs(Config.PlayersNumberOfCharacters) do
-            if v.license == license or v.license == license2 then
+            if license2 == v.license2 then
                 numOfChars = v.numberOfChars
                 break
             else
@@ -235,10 +235,10 @@ lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", funct
     return numOfChars
 end)
 
-lib.callback.register("pappu-multicharacter:server:setupCharacters", function(source)
-    local license, license2 = GetPlayerIdentifierByType(src, 'license'), GetPlayerIdentifierByType(src, 'license2')
+lib.callback.register("pappu-multicharacter:server:setupCharacters", function(src)
+    local license2 = GetPlayerIdentifierByType(src, 'license2')
     local plyChars = {}
-    MySQL.query('SELECT * FROM players WHERE license = ? or license = ?', {license, license2}, function(result)
+    MySQL.query('SELECT * FROM players WHERE license = ?', {license2}, function(result)
         for i = 1, (#result), 1 do
             result[i].charinfo = json.decode(result[i].charinfo)
             result[i].money = json.decode(result[i].money)
