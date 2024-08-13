@@ -166,8 +166,8 @@ async function getBase64Image(src, removeImageBackGround, callback, outputFormat
 
    function setupCharacters(characters,photo1,photo2,photo3,photo4) {
 
-    $(".characters-text2").html(setupCharacters.length+' / '+NChar+" "+ translations["characters_count"]);
-    setCharactersList(setupCharacters.length)
+    $(".characters-text2").html(characters.length+' / '+NChar+" "+ translations["characters_count"]);
+    setCharactersList(characters.length)
     $.each(characters, function(index, char){
         //   console.log(char.cid)
         $('#char-'+char.cid).html("");

@@ -125,7 +125,7 @@ end)
 
 RegisterNetEvent('pappu-multicharacter:server:loadUserData', function(cData)
     local src = source
-    if exports.qbx_core:Login(source, citizenid) then
+    if exports.qbx_core:Login(source, cData.citizenid) then
         repeat
             Wait(10)
         until hasDonePreloading[src]
@@ -186,13 +186,12 @@ end)
 -- Callbacks
 
 lib.callback.register("pappu-multicharacter:server:GetUserCharacters", function(source)
-    local src = source
-    local license = GetPlayerIdentifierByType(src, 'license2')
+    local license, license2 = GetPlayerIdentifierByType(source, 'license'), GetPlayerIdentifierByType(src, 'license2')
     local characters = {}
     if not license then
         return characters
     end
-    MySQL.query('SELECT * FROM players WHERE license = ?', {license}, function(result)
+    MySQL.query('SELECT * FROM players WHERE license = ? OR license = ?', {license, license2}, function(result)
         if result ~= nil then
             for _, v in pairs(result) do
                 local charinfo = json.decode(v.charinfo)
@@ -216,13 +215,12 @@ lib.callback.register("pappu-multicharacter:server:GetServerLogs", function(_)
     end)
 end)
 
-local src = source
 lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", function(src)
-    local license2 = GetPlayerIdentifierByType(src, 'license2')
+    local license, license2 = GetPlayerIdentifierByType(src, 'license'), GetPlayerIdentifierByType(src, 'license2')
     local numOfChars = 0
     if next(Config.PlayersNumberOfCharacters) then
         for _, v in pairs(Config.PlayersNumberOfCharacters) do
-            if license2 == v.license2 then
+            if license == v.license or license2 == v.license then
                 numOfChars = v.numberOfChars
                 break
             else
@@ -236,9 +234,10 @@ lib.callback.register("pappu-multicharacter:server:GetNumberOfCharacters", funct
 end)
 
 lib.callback.register("pappu-multicharacter:server:setupCharacters", function(src)
-    local license2 = GetPlayerIdentifierByType(src, 'license2')
+    local license, license2 = GetPlayerIdentifierByType(src, 'license'), GetPlayerIdentifierByType(src, 'license2')
     local plyChars = {}
-    MySQL.query('SELECT * FROM players WHERE license = ?', {license2}, function(result)
+    local result = MySQL.query.await('SELECT * FROM players WHERE license = ? OR license = ?', {license, license2})
+    if result[1] then
         for i = 1, (#result), 1 do
             result[i].charinfo = json.decode(result[i].charinfo)
             result[i].money = json.decode(result[i].money)
@@ -246,7 +245,8 @@ lib.callback.register("pappu-multicharacter:server:setupCharacters", function(sr
             plyChars[#plyChars+1] = result[i]
         end
         return plyChars
-    end)
+    end
+    return plyChars
 end)
 
 lib.callback.register("pappu-multicharacter:server:getSkin", function(_, cid)

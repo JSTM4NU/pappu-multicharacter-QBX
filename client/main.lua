@@ -136,17 +136,14 @@ end)
 RegisterNetEvent('pappu-multicharacter:client:chooseChar', function()
     SetNuiFocus(false, false)
     DoScreenFadeOut(10)
+    ShutdownLoadingScreen()
+    ShutdownLoadingScreenNui()
     Wait(1000)
     local interior = GetInteriorAtCoords(Config.Interior.x, Config.Interior.y, Config.Interior.z - 18.9)
     LoadInterior(interior)
-    while not IsInteriorReady(interior) do
-        Wait(1000)
-    end
     FreezeEntityPosition(PlayerPedId(), true)
     SetEntityCoords(PlayerPedId(), Config.HiddenCoords.x, Config.HiddenCoords.y, Config.HiddenCoords.z)
     Wait(1500)
-    ShutdownLoadingScreen()
-    ShutdownLoadingScreenNui()
     openCharMenu(true)
 end)
 
@@ -282,13 +279,13 @@ end)
 
 RegisterNUICallback('setupCharacters', function(_, cb)
     lib.callback("pappu-multicharacter:server:setupCharacters", false, function(result)
+        lib.print.error(result)
         cached_player_skins = {}
         SendNUIMessage({
             action = "setupCharacters",
             characters = result
         })
         cb("ok")
-        print(json.encode(characters))
     end)
 end)
 
